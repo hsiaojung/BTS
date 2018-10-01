@@ -16,6 +16,19 @@ from threading import Thread
 import os
 import check
 
+
+import sys, signal
+
+
+
+def signal_handler(signal, frame):
+    print("\nprogram exiting gracefully")
+    sys.exit(0)
+
+signal.signal(signal.SIGINT, signal_handler)
+
+
+
 hostname = "8.8.8.8" #example
 
 v1_index = 20
@@ -158,7 +171,7 @@ def parseBTS(command,parameter,index):
 def main():
 
     #logging.info('Hello pi!')
-    while(1):
+   while(1):
         response = os.system("ping -c 1 " + hostname)
 
         #and then check the response...
@@ -167,21 +180,19 @@ def main():
             break
         else:
             print ("host is down!")
-            sleep(5)    
-
-
-
-    try:
-        
+            sleep(5)
+   while(1):
+        try:
           readBTS()
           parseBTS(outbvr,parameter_vr,v1_index)
           parseBTS(outbtemp,parameter_ta,temp_index)
           parseBTS(outti,parameter_ti,ti_index)
           check.callServer(parameter_ti,parameter_vr,parameter_ta,247,0)
           sleep(60); 
-            
-    except KeyboardInterrupt:
+        except KeyboardInterrupt:
           print('interrupted!')
+
+          
 
 if __name__ == "__main__":
     main()
