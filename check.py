@@ -58,7 +58,7 @@ def callServer(b_ti,b_vr,b_temp,b_address,b_id):
 		        print("show = %s."%(readback_server) )
 		        #print(readback_server.find("OK"))
 		        if readback_server.find("OK") >= 0:
-		            print("ok!!!")
+		            print("web server is live")
 		            #print ("%s is on the list! SET GATE%d (GPIO%d) to OPEN"%(readback,GATE,GATEIO))
 		            #GPIO.output(GATEIO, mainloop.OPEN)
 		            #logging.info('%s is on the list! SET GATE%d (GPIO%d) to OPEN'%(readback,GATE,GATEIO))
@@ -68,5 +68,5 @@ def callServer(b_ti,b_vr,b_temp,b_address,b_id):
 		            #print ("%s is not on the list! SET GATE%d (GPIO%d) to LOW"%(readback,GATE,GATEIO))
 		            #logging.info('%s isnt on the list! SET GATE%d (GPIO%d) to CLOSE'%(readback,GATE,GATEIO))
 		            print("die!!!")
-		print("done !!!")            
+           
                     
