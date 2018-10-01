@@ -1,8 +1,6 @@
 '''
 2018/09/25 made by Cyril Chang 
-
-code for RS485 reader to BTS 01 BAT monitor!!!
-
+code for RS485 reader to BTS01 BAT monitor
 v0.1
 '''
 
