@@ -20,8 +20,6 @@ def callServer(b_ti,b_vr,b_temp,b_address,b_id):
 
 
 		print("checkServer.............")
-
-
 		urlstr = []
 		
 		urlstr ="http://www.wisoft.com.tw/wibattery/pass_result.jsp?b_id=%s"%str(b_id)+\

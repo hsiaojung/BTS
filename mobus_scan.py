@@ -9,21 +9,10 @@ import decimal
 import re
 import sys
 from time import sleep
-
 from threading import Thread
 import os
 import check
-
-
 import sys, signal
-
-
-
-def signal_handler(signal, frame):
-    print("\nprogram exiting gracefully")
-    sys.exit(0)
-
-signal.signal(signal.SIGINT, signal_handler)
 
 
 
@@ -41,6 +30,16 @@ time_index = 20
 parameter_vr = []
 parameter_ti = []
 parameter_ta = []
+
+
+
+
+def signal_handler(signal, frame):
+    print("\nprogram exiting gracefully")
+    sys.exit(0)
+
+signal.signal(signal.SIGINT, signal_handler)
+
 
 
 
@@ -73,66 +72,6 @@ outtime485 = b"mbpoll 1.4 - FieldTalk(tm) Modbus(R) Master Simulator\nCopyright 
 outbtemp485 = b"mbpoll 1.4 - FieldTalk(tm) Modbus(R) Master Simulator\nCopyright \xc2\xa9 2015-2018 Pascal JEAN, https://github.com/epsilonrt/mbpoll\nThis program comes with ABSOLUTELY NO WARRANTY.\nThis is free software, and you are welcome to redistribute it\nunder certain conditions; type 'mbpoll -w' for details.\n\nProtocol configuration: Modbus RTU\nSlave configuration...: address = [247]\n                        start reference = 17, count = 8\nCommunication.........: /dev/ttyUSB1,       9600-8N1 \n                        t/o 1.00 s, poll rate 1000 ms\nData type.............: 16-bit register, input register table\n\n-- Polling slave 247...\n[17]: \t0x0005\n[18]: \t0x0004\n[19]: \t0x0005\n[20]: \t0x0005\n[21]: \t0x0005\n[22]: \t0x0006\n[23]: \t0x0005\n[24]: \t0x0006\n\n"
 outti485 = b"mbpoll 1.4 - FieldTalk(tm) Modbus(R) Master Simulator\nCopyright \xc2\xa9 2015-2018 Pascal JEAN, https://github.com/epsilonrt/mbpoll\nThis program comes with ABSOLUTELY NO WARRANTY.\nThis is free software, and you are welcome to redistribute it\nunder certain conditions; type 'mbpoll -w' for details.\n\nProtocol configuration: Modbus RTU\nSlave configuration...: address = [247]\n                        start reference = 49, count = 2\nCommunication.........: /dev/ttyUSB1,       9600-8N1 \n                        t/o 1.00 s, poll rate 1000 ms\nData type.............: 16-bit register, input register table\n\n-- Polling slave 247...\n[49]: \t0x0017\n[50]: \t0x0147\n\n"
 
-
-
-'''
-
-output = outbvr.decode("utf-8")
-output = output.replace('\t',' ')
-output = output.replace('\n',':')
-#print(output)
-output = output.split(':')
-a = output
-
-print( len(a))                        
-for x  in range(v1_index, len(a) -1,2): 
-	totalCount = a[x]
-	totalCount = totalCount[2:]
-	print ('totalCount:', totalCount)
-	hextoint = int(totalCount,16) 
-	print ('hextoint:', hextoint)
-	parameter_vr.append(hextoint)
-
-print (parameter_vr) 
-
-
-output = outti.decode("utf-8")
-output = output.replace('\t',' ')
-output = output.replace('\n',':')
-#print(output)
-output = output.split(':')
-a = output
-print( len(a))                        
-for x  in range(ti_index, len(a) -1,2): 
-	totalCount = a[x]
-	totalCount = totalCount[2:]
-	print ('totalCount:', totalCount)
-	hextoint = int(totalCount,16) 
-	print ('hextoint:', hextoint)
-	parameter_ti.append(hextoint)
-
-print (parameter_ti) 
-
-
-
-output = outbtemp.decode("utf-8")
-output = output.replace('\t',' ')
-output = output.replace('\n',':')
-#print(output)
-output = output.split(':')
-a = output
-print( len(a))                        
-for x  in range(ti_index, len(a) -1,2): 
-	totalCount = a[x]
-	totalCount = totalCount[2:]
-	print ('totalCount:', totalCount)
-	hextoint = int(totalCount,16) 
-	print ('hextoint:', hextoint)
-	parameter_ta.append(hextoint)
-
-print (parameter_ta) 
-
-'''
 def readBTS(outti_485,outbtemp_485,outbvr_485):
 
 
