@@ -19,7 +19,7 @@ socket.setdefaulttimeout(timeout)
 def callServer(b_ti,b_vr,b_temp,b_address,b_id):
 
 
-		print("checkServer.............")
+		print("\n We are checking Server now .............")
 		urlstr = []
 		
 		urlstr ="http://www.wisoft.com.tw/wibattery/pass_result.jsp?b_id=%s"%str(b_id)+\
@@ -53,10 +53,11 @@ def callServer(b_ti,b_vr,b_temp,b_address,b_id):
 		    print("except")
 		else:
 		        readback_server = f.read().decode('utf-8')
-		        print("show = %s."%(readback_server) )
+		        #print("show = %s."%(readback_server) )
 		        #print(readback_server.find("OK"))
 		        if readback_server.find("OK") >= 0:
-		            print("web server is live")
+		            print("\n Web server is live and we send out \n")
+		            
 		            #print ("%s is on the list! SET GATE%d (GPIO%d) to OPEN"%(readback,GATE,GATEIO))
 		            #GPIO.output(GATEIO, mainloop.OPEN)
 		            #logging.info('%s is on the list! SET GATE%d (GPIO%d) to OPEN'%(readback,GATE,GATEIO))
@@ -65,6 +66,6 @@ def callServer(b_ti,b_vr,b_temp,b_address,b_id):
 		            #GPIO.output(GATEIO, mainloop.CLOSE)
 		            #print ("%s is not on the list! SET GATE%d (GPIO%d) to LOW"%(readback,GATE,GATEIO))
 		            #logging.info('%s isnt on the list! SET GATE%d (GPIO%d) to CLOSE'%(readback,GATE,GATEIO))
-		            print("die!!!")
+		            print("die~! check connection!!!")
            
                     
