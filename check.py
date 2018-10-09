@@ -38,7 +38,7 @@ def callServer(b_ti,b_vr,b_temp,b_address,b_id):
                   "&t4=%.1f"%(b_temp[0]*0.1)+"&t5=%.1f"%(b_temp[1]*0.1)+\
                   "&t6=%.1f"%(b_temp[0]*0.1)+"&t7=%.1f"%(b_temp[1]*0.1)
                   
-		#print(urlstr)
+		print(urlstr)
 		try:
 		    f = urllib.request.urlopen(urlstr ,timeout=5)
 		except HTTPError as e:

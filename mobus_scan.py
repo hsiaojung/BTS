@@ -63,49 +63,79 @@ outtime = b"mbpoll 1.4 - FieldTalk(tm) Modbus(R) Master Simulator\nCopyright \xc
 outbtemp = b"mbpoll 1.4 - FieldTalk(tm) Modbus(R) Master Simulator\nCopyright \xc2\xa9 2015-2018 Pascal JEAN, https://github.com/epsilonrt/mbpoll\nThis program comes with ABSOLUTELY NO WARRANTY.\nThis is free software, and you are welcome to redistribute it\nunder certain conditions; type 'mbpoll -w' for details.\n\nProtocol configuration: Modbus RTU\nSlave configuration...: address = [247]\n                        start reference = 17, count = 8\nCommunication.........: /dev/ttyUSB1,       9600-8N1 \n                        t/o 1.00 s, poll rate 1000 ms\nData type.............: 16-bit register, input register table\n\n-- Polling slave 247...\n[17]: \t0x0005\n[18]: \t0x0004\n[19]: \t0x0005\n[20]: \t0x0005\n[21]: \t0x0005\n[22]: \t0x0006\n[23]: \t0x0005\n[24]: \t0x0006\n\n"
 outti = b"mbpoll 1.4 - FieldTalk(tm) Modbus(R) Master Simulator\nCopyright \xc2\xa9 2015-2018 Pascal JEAN, https://github.com/epsilonrt/mbpoll\nThis program comes with ABSOLUTELY NO WARRANTY.\nThis is free software, and you are welcome to redistribute it\nunder certain conditions; type 'mbpoll -w' for details.\n\nProtocol configuration: Modbus RTU\nSlave configuration...: address = [247]\n                        start reference = 49, count = 2\nCommunication.........: /dev/ttyUSB1,       9600-8N1 \n                        t/o 1.00 s, poll rate 1000 ms\nData type.............: 16-bit register, input register table\n\n-- Polling slave 247...\n[49]: \t0x0017\n[50]: \t0x0147\n\n"
 
+def exists(path):
+    """Test whether a path exists.  Returns False for broken symbolic links"""
+    try:
+        os.stat(path)
+    except OSError:
+        return False
+    return 1
+
+
 def readBTS():
 
+   ret = 1
+   ans = exists('/dev/ttyUSB0')
 
-    process =  subprocess.Popen(ticmd, stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
-    returncode = process.wait()
-    
-    outti_485 = process.stdout.read()
-    #outti_485 = process.stdout.read().decode("utf-8")
-    #print ("outti_485=%s"%outti_485)
+   if ans == 1:
+        ret = 1
+   else :
+        print("Check ttyUSB0 !,it does not exist")
+        os._exit(0)
 
-    process =  subprocess.Popen(bvrcmd, stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
-    returncode = process.wait()
-    outbvr_485 = process.stdout.read()
-    #outbvr_485 = process.stdout.read().decode("utf-8")
-    #print ("outbvr_485=%s"%outbvr_485)
+        
+   #process =  subprocess.Popen(ticmd, stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+   process =  subprocess.Popen(ticmd, stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+   returncode = process.wait()
+   outti_485 = process.stdout.read().decode("utf-8")
+   if outti_485.find("failed:") >= 0:
+       
+ 
+       ret = 0
+   #outti_485 = process.stdout.read()    
+   print ("outti_485=%s"%outti_485)
 
-    process =  subprocess.Popen(btempcmd, stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
-    returncode = process.wait()
-    outbtemp_485 = process.stdout.read()
-    #outbtemp_485 = process.stdout.read().decode("utf-8")
-    #print ("outbtemp_485=%s"%outbtemp_485)
-    return outti_485,outbvr_485,outbtemp_485,1
-    
+   
+   process =  subprocess.Popen(bvrcmd, stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+   returncode = process.wait()
+   outbvr_485 = process.stdout.read().decode("utf-8")
+   if outbvr_485.find("failed:") >= 0:
+      ret = 0
+   #outbvr_485 = process.stdout.read()   
+   print ("outbvr_485=%s"%outbvr_485)
 
+
+   process =  subprocess.Popen(btempcmd, stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+   returncode = process.wait()
+   outbtemp_485 = process.stdout.read().decode("utf-8")
+   if outbtemp_485.find("failed:") >= 0:
+      ret = 0
+   #outbtemp_485 = process.stdout.read().decode("utf-8")outbtemp_485 = process.stdout.read()   
+   print ("outbtemp_485=%s"%outbtemp_485)
+
+   
+   return outti_485,outbvr_485,outbtemp_485,ret
+   
 	
 def parseBTS(command,parameter,index):
 
-	
-	output = command.decode("utf-8")
+  
+	#output = command.decode("utf-8")
+	output = command
 	output = output.replace('\t',' ')
 	output = output.replace('\n',':')
 	#print(output)
 	output = output.split(':')
 	a = output
 
-
+	#print( "START DEBUF=%s"%a)    
 	#print( len(a))                        
 	for x  in range(index, len(a) -1,2): 
 		totalCount = a[x]
 		totalCount = totalCount[2:]
-		print ('totalCount:', totalCount)
+		#print ('totalCount:', totalCount)
 		hextoint = int(totalCount,16) 
-		print ('hextoint:', hextoint)
+		#print ('hextoint:', hextoint)
 		parameter.append(hextoint)
 
 	print (parameter) 
@@ -127,15 +157,19 @@ def main():
             sleep(5)
    while(1):
         try:
-          parameter_vr = []
-          parameter_ti = []
-          parameter_ta = []
-          outti485,outbvr485,outbtemp485,ret = readBTS()
-          parseBTS(outbvr485,parameter_vr,v1_index)
-          parseBTS(outbtemp485,parameter_ta,temp_index)
-          parseBTS(outti485,parameter_ti,ti_index)
-          check.callServer(parameter_ti,parameter_vr,parameter_ta,247,0)
-          sleep(10);
+         parameter_vr = []
+         parameter_ti = []
+         parameter_ta = []
+         outti485,outbvr485,outbtemp485,ret = readBTS()
+         if ret == 0 :
+            print('mobus error !!!!!!, we are going to retry!!')
+            sleep(5)
+         else :	
+          	parseBTS(outbvr485,parameter_vr,v1_index)
+          	parseBTS(outbtemp485,parameter_ta,temp_index)
+          	parseBTS(outti485,parameter_ti,ti_index)
+          	check.callServer(parameter_ti,parameter_vr,parameter_ta,247,0)
+          	sleep(29);
         except KeyboardInterrupt:
           print('interrupted!')
 
