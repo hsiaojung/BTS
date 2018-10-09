@@ -90,7 +90,7 @@ def readBTS():
 	
 def parseBTS(command,parameter,index):
 
-  
+	
 	output = command.decode("utf-8")
 	output = output.replace('\t',' ')
 	output = output.replace('\n',':')
@@ -127,12 +127,15 @@ def main():
             sleep(5)
    while(1):
         try:
+          parameter_vr = []
+          parameter_ti = []
+          parameter_ta = []
           outti485,outbvr485,outbtemp485,ret = readBTS()
           parseBTS(outbvr485,parameter_vr,v1_index)
           parseBTS(outbtemp485,parameter_ta,temp_index)
           parseBTS(outti485,parameter_ti,ti_index)
           check.callServer(parameter_ti,parameter_vr,parameter_ta,247,0)
-          sleep(60);
+          sleep(10);
         except KeyboardInterrupt:
           print('interrupted!')
 
