@@ -89,9 +89,7 @@ def readBTS():
    returncode = process.wait()
    outti_485 = process.stdout.read().decode("utf-8")
    if outti_485.find("failed:") >= 0:
-       
- 
-       ret = 0
+      ret = 0
    #outti_485 = process.stdout.read()    
    print ("outti_485=%s"%outti_485)
 
