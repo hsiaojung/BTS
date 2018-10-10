@@ -163,7 +163,7 @@ def main():
          outti485,outbvr485,outbtemp485,ret = readBTS()
          if ret == 0 :
             print('mobus error !!!!!!, we are going to retry!!')
-            sleep(5)
+            sleep(25)
          else :	
           	parseBTS(outbvr485,parameter_vr,v1_index)
           	parseBTS(outbtemp485,parameter_ta,temp_index)
